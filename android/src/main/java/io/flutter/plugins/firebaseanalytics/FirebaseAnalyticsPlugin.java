@@ -183,11 +183,49 @@ public class FirebaseAnalyticsPlugin implements MethodCallHandler, FlutterPlugin
         bundle.putDouble(key, (Double) value);
       } else if (value instanceof Boolean) {
         bundle.putBoolean(key, (Boolean) value);
+      } else if (value instanceof List) {
+        try{
+          Parcelable[] items=createBundleArrayByList((List<Map<String, Object>>) value);
+          bundle.putParcelableArray(key,items);
+        }catch (Exception e){
+          e.printStackTrace();
+        }
       } else {
         throw new IllegalArgumentException(
-            "Unsupported value type: " + value.getClass().getCanonicalName());
+                "Unsupported value type: " + value.getClass().getCanonicalName());
       }
     }
     return bundle;
+  }
+
+  private static Bundle[] createBundleArrayByList(List<Map<String, Object>> list) {
+    if(list==null){
+      return null;
+    }
+    Bundle[] items=new Bundle[list.size()];
+    for (int i = 0; i < list.size(); i++) {
+      Map<String, Object> map=list.get(i);
+      Bundle bundle = new Bundle();
+      for (Map.Entry<String, Object> jsonParam : map.entrySet()) {
+        final Object value = jsonParam.getValue();
+        final String key = jsonParam.getKey();
+        if (value instanceof String) {
+          bundle.putString(key, (String) value);
+        } else if (value instanceof Integer) {
+          bundle.putInt(key, (Integer) value);
+        } else if (value instanceof Long) {
+          bundle.putLong(key, (Long) value);
+        } else if (value instanceof Double) {
+          bundle.putDouble(key, (Double) value);
+        } else if (value instanceof Boolean) {
+          bundle.putBoolean(key, (Boolean) value);
+        } else {
+          throw new IllegalArgumentException(
+                  "Unsupported value type: " + value.getClass().getCanonicalName());
+        }
+      }
+      items[i]=bundle;
+    }
+    return items;
   }
 }

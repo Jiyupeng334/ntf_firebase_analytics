@@ -46,7 +46,7 @@ android {
     }
     dependencies {
         api firebaseCoreProject
-        implementation platform("com.google.firebase:firebase-bom:${getRootProjectExtOrCoreProperty("FirebaseSDKVersion", firebaseCoreProject)}")
+        implementation platform('com.google.firebase:firebase-bom:25.12.0')
         implementation 'com.google.firebase:firebase-analytics'
         implementation 'androidx.annotation:annotation:1.1.0'
     }
